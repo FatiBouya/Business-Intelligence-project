@@ -1,0 +1,70 @@
+<Schema name="Ventes_datemart_schema">
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Temps_Dim">
+    <Hierarchy name="Temps_Dim" visible="true" hasAll="true" primaryKey="DATE_DEBUT">
+      <Table name="TEMPS_DIM" schema="TARGET">
+      </Table>
+      <Level name="YEAR" visible="true" column="YEAR" nameColumn="YEAR" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Month" visible="true" column="MONTH" nameColumn="MONTH" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="JOUR" visible="true" column="DATE_DEBUT" nameColumn="DATE_DEBUT" type="Date" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Customer_Dim">
+    <Hierarchy name="Customers" visible="true" hasAll="true" primaryKey="CUSTOMERID">
+      <Table name="CUSTOMER_DIM" schema="TARGET">
+      </Table>
+      <Level name="CustomerIName" visible="true" column="CUSTOMERNAME" nameColumn="CUSTOMERNAME" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Segment" visible="true" column="SEGMENT" nameColumn="SEGMENT" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="CustomerID" visible="true" column="CUSTOMERID" nameColumn="CUSTOMERID" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Region_Dim">
+    <Hierarchy name="Region_Dim" visible="true" hasAll="true">
+      <Table name="REGION_DIM" schema="TARGET">
+      </Table>
+      <Level name="Country" visible="true" column="COUNTRY" nameColumn="COUNTRY" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Region" visible="true" column="REGION" nameColumn="REGION" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="State" visible="true" column="STATE" nameColumn="STATE" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="City" visible="true" column="CITY" nameColumn="CITY" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Product_Dim">
+    <Hierarchy name="Product" visible="true" hasAll="true" primaryKey="PRODUCTID">
+      <Table name="PRODUCT_DIM" schema="TARGET">
+      </Table>
+      <Level name="ProductName" visible="true" column="PRODUCTNAME" nameColumn="PRODUCTNAME" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Categories" visible="true" column="CATEGORIES" nameColumn="CATEGORIES" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Sub_Categorie" visible="true" column="SUB_CATEGORY" nameColumn="SUB_CATEGORY" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="ProductID" visible="true" column="PRODUCTID" nameColumn="PRODUCTID" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Sales_Fact" visible="true" cache="true" enabled="true">
+    <Table name="FACT_SALES" schema="TARGET">
+    </Table>
+    <DimensionUsage source="Temps_Dim" name="Temps" visible="true" foreignKey="ORDERDATE" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Customer_Dim" name="Customer" visible="true" foreignKey="CUSTOMERID" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Region_Dim" name="Region" visible="true" foreignKey="CITY" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Product_Dim" name="Product" visible="true" foreignKey="PRODUCTID" highCardinality="false">
+    </DimensionUsage>
+    <Measure name="Sales" column="SALES" datatype="Numeric" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="Nbr_Produit" column="PRODUCTID" datatype="Integer" aggregator="count" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
